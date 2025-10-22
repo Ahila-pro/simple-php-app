@@ -1,0 +1,45 @@
+trigger:
+  branches:
+    include:
+      - main   # CI trigger on push to main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  app_path: '/var/www/html'     # target path in VM
+  service_connection: 'linux-phpvm-ssh-connection'
+
+steps:
+  # Step 1: Checkout code
+  - checkout: self
+
+  # Step 2: Basic Unit Testing (PHPUnit Example)
+  - script: |
+      echo "Running PHP Unit Tests..."
+      if [ -f ./vendor/bin/phpunit ]; then
+        ./vendor/bin/phpunit --testdox
+      else
+        echo "No tests found or PHPUnit not installed."
+      fi
+    displayName: "Run PHP Unit Tests"
+
+  # Step 3: Deploy code to VM via SSH
+  - task: CopyFilesOverSSH@0
+    inputs:
+      sshEndpoint: $(service_connection)
+      sourceFolder: '$(Build.SourcesDirectory)'
+      contents: '**'
+      targetFolder: '$(app_path)'
+    displayName: "Copy Application Files to VM"
+
+  # Step 4: Restart Apache on VM
+  - task: SSH@0
+    inputs:
+      sshEndpoint: $(service_connection)
+      runOptions: inline
+      inline: |
+        echo "Restarting Apache..."
+        sudo systemctl restart apache2
+    displayName: "Restart Web Server"
+
