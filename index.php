@@ -6,9 +6,14 @@
 <body>
     <h2>Enter Your Name</h2>
     <form method="post" action="">
-        <input type="text" name="username" placeholder="Type your name" required>
-        <input type="text" name="cityname" placeholder="Type your city" required>
-        <button type="submit">Submit</button>
+        <div>
+            <input type="text" name="username" placeholder="Type your name" required>
+            <input type="text" name="cityname" placeholder="Type your city" required>
+        </div>
+        <br>
+        <div>
+            <button type="submit">Submit</button>
+        </div>
     </form>
 
     <?php
