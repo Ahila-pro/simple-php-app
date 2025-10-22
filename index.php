@@ -16,7 +16,7 @@
         $name = htmlspecialchars($_POST['username']);
         $cname = htmlspecialchars($_POST['cityname']); // sanitize input
         echo "<h3>Hello, " . $name . "!</h3>";
-        echo "<h3>Welcome, " . $cname . "!</h3>";
+        echo "<h3>Welcomeee, " . $cname . "!</h3>";
     }
     ?>
 </body>
